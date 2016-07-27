@@ -48,7 +48,7 @@ skm (selective k-means) solves the following problem: assume a set of source $s$
     
         ![OWL Page - Option](fig/owl_option.png){#owl_option .class width=640px height=407px}.
 
-    - Click _Find Warehouse Locations_ to run analysis and update the map, control panel and page.
+    - Click __Find Warehouse Locations__ to run analysis and update the map, control panel and page.
 
     ![OWL Page - Find](fig/owl_find.png){#owl_find .class width=640px height=407px}.  
 
@@ -70,12 +70,11 @@ skm (selective k-means) solves the following problem: assume a set of source $s$
 
 + View zip2012 data in table.
 
-
 ## TODO:
 
-- Add customerized icons on map-view based on prefixed or not, see icons being commented out.
++ Add customerized icons on map-view based on prefixed or not, see icons being commented out.
 
 ## NOTE:
 
-- Please contact [the author](mailto:gyang274@gmail.com) for any query on this App.
++ Please contact [the author](mailto:gyang274@gmail.com) for any query on this App.
 

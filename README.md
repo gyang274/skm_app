@@ -36,7 +36,7 @@ OWL Shiny Page:
 
         <img src="fig/owl_option.png" alt="OWL Page - Option" id="owl_option" class="class" width="640" height="407" />.
 
-    -   Click *Find Warehouse Locations* to run analysis and update the map, control panel and page.
+    -   Click **Find Warehouse Locations** to run analysis and update the map, control panel and page.
 
     <img src="fig/owl_find.png" alt="OWL Page - Find" id="owl_find" class="class" width="640" height="407" />.
 
