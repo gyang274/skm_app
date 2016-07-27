@@ -36,7 +36,7 @@ skm (selective k-means) solves the following problem: assume a set of source $s$
 
     ![OWL Page - Initialzation - Click](fig/owl_init_click.png){#owl_init_click .class width=640px height=407px}.
 
-+ On the control panel, _Optimization Objective_, give options on:
++ On the control panel, __Optimization Objective__, give options on:
 
     - Choose the objective: minimize distance, zone - [Fedex Rates on Zone](http://www.thesnowtrade.org/images/support/FedEx%20Zones.pdf), or estimated time in transit.
 
@@ -52,7 +52,7 @@ skm (selective k-means) solves the following problem: assume a set of source $s$
 
     ![OWL Page - Find](fig/owl_find.png){#owl_find .class width=640px height=407px}.  
 
-+ After click _Find Warehouse Locations_, control panel will be updated with a new section _Optimal Warehouse Locations_, which give options on:
++ After click __Find Warehouse Locations__, control panel will be updated with a new section __Optimal Warehouse Locations__, which give options on:
 
     - Choose to view results with optimality rank 1, 2, ..., up to the number of random start. This enable the user to view not only the best solution, but also the 2nd best solution, 3rd best solution, and so on. Because, in practial, we often make decsion not only based on mathematical optimality but also other factors.
 
@@ -77,5 +77,5 @@ skm (selective k-means) solves the following problem: assume a set of source $s$
 
 ## NOTE:
 
-- Shiny App is fully developed yet not shared, if interested, please contact [the author](mailto:gyang274@gmail.com).
+- Please contact [the author](mailto:gyang274@gmail.com) for any query on this App.
 

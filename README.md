@@ -24,7 +24,7 @@ OWL Shiny Page:
 
     <img src="fig/owl_init_click.png" alt="OWL Page - Initialzation - Click" id="owl_init_click" class="class" width="640" height="407" />.
 
--   On the control panel, *Optimization Objective*, give options on:
+-   On the control panel, **Optimization Objective**, give options on:
 
     -   Choose the objective: minimize distance, zone - [Fedex Rates on Zone](http://www.thesnowtrade.org/images/support/FedEx%20Zones.pdf), or estimated time in transit.
 
@@ -40,7 +40,7 @@ OWL Shiny Page:
 
     <img src="fig/owl_find.png" alt="OWL Page - Find" id="owl_find" class="class" width="640" height="407" />.
 
--   After click *Find Warehouse Locations*, control panel will be updated with a new section *Optimal Warehouse Locations*, which give options on:
+-   After click **Find Warehouse Locations**, control panel will be updated with a new section **Optimal Warehouse Locations**, which give options on:
 
     -   Choose to view results with optimality rank 1, 2, ..., up to the number of random start. This enable the user to view not only the best solution, but also the 2nd best solution, 3rd best solution, and so on. Because, in practial, we often make decsion not only based on mathematical optimality but also other factors.
 
@@ -66,4 +66,4 @@ TODO:
 NOTE:
 -----
 
--   Shiny App is fully developed yet not shared, if interested, please contact [the author](mailto:gyang274@gmail.com).
+-   Please contact [the author](mailto:gyang274@gmail.com) for any query on this App.
