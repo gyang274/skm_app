@@ -5,7 +5,7 @@ OWL - Optimal Warehouse Locator
 OWL (Optimal Warehouse Locator) finder is a shiny application based on R package [skm](https://github.com/gyang274/skm).
 ------------------------------------------------------------------------------------------------------------------------
 
-Welcome to view this [OWL app on shinyapp.io](https://gyang.shinyapps.io/owl/).
+Welcome to view this [OWL app on shinyapp.io](https://gyang.shinyapps.io/owl_skm/).
 
 skm (selective k-means)
 -----------------------
