@@ -47,3 +47,9 @@ Temporary Items
 .apdisk
 .Rproj.user
 .Rhistory
+
+# local file
+mat/
+
+# shinyapps.io
+rsconnect
