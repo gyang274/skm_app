@@ -12,7 +12,7 @@
 
 # stwd
 
-# setwd("d:/guang/packages/skm/app/")
+# setwd("f:/technism/r/r_pkgs/skm/app/")
 
 # load
 
