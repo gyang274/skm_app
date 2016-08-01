@@ -86,7 +86,7 @@ shinyUI(navbarPage(
     
     div(
       
-      class = "msgs", textOutput(outputId = "msg")
+      class = "msgs", textOutput(outputId = "msgs")
       
     )
     

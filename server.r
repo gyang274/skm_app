@@ -33,7 +33,7 @@ shinyServer(function(input, output, session) {
     
     if ( is.null(click) ) { return() }
     
-    output$msg <- renderText({
+    output$msgs <- renderText({
       
       paste("You've selected ", click$id, " - Add it into Prefixed locations?")
       
@@ -44,7 +44,7 @@ shinyServer(function(input, output, session) {
   #- analytic view
   create_optimal_wlist <- eventReactive(input$fnd, {
     
-    output$msg <- renderText({
+    output$msgs <- renderText({
       paste0(
         "You've selected to find ", input$kwh, " warehouse locations ", 
         "in objective to minimize ", input$wgt, " weighed average ", input$obj, " ",
@@ -71,16 +71,16 @@ shinyServer(function(input, output, session) {
     
     ## optimization
     
-    # output$msg <- renderText({ "create_optimal_wlist: analysis is running ...\n" })
+    # output$msgs <- renderText({ "create_optimal_wlist: analysis is running ...\n" })
     
     eval(parse(
       text = 'a_skmSolution <- skm_mls_cpp(dmtx' %+% '_' %+% m_obj %+% '_' %+% m_wgt %+% ', ' %+% 
         'k = input$kwh, g = dsrc[["g"]], s_must = s_must_idx_cpp, max_it = 100L, max_at = input$nas)'
     ))
     
-    # output$msg <- renderText({ "create_optimal_wlist: analysis is complete ...\n" })
+    # output$msgs <- renderText({ "create_optimal_wlist: analysis is complete ...\n" })
     
-    # output$msg <- renderText({
+    # output$msgs <- renderText({
     #   paste0(
     #     "You've selected to find ", input$kwh, " warehouse locations ",
     #     "in objective to minimize ", input$wgt, " weighed average ", input$obj, " ",
