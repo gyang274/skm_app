@@ -60,12 +60,12 @@ dsrc <- dzip %>%
   select(zip) %>%
   merge(dzip, by = "zip") %>%
   select(-zip3) %>%
-  mutate(g = as.numeric(as.factor(substr(zip, 1, 1)))) %>%
+  mutate(g = as.numeric(as.factor(substr(zip, 1L, 1L)))) %>%
   mutate(id = paste0(city, ' - ', state, ' (', zip, ')')) %>%
   mutate(popup = paste0(
     '<b>', city, ' - ', state, ' (', zip, ')', '<b><br/>',
-    'Population: ', round(pop / 1000.00000, 2), ' Thousands', '<br/>',
-    'Total Income: ', round(ink / 1000000.00, 2), ' Millions')) %>%
+    'Population: ', round(pop / 1000.00000, 2L), ' Thousands', '<br/>',
+    'Total Income: ', round(ink / 1000000.00, 2L), ' Millions')) %>%
   rename(s = zip, s_lat = lat, s_lng = lng) %>%
   `class<-`(c("data.table", "data.frame"))
 

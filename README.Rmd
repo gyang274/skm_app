@@ -16,65 +16,83 @@ knitr::opts_chunk$set(
 
 # OWL - Optimal Warehouse Locator
 
-OWL (Optimal Warehouse Locator) is a shiny application based on R package [skm](https://github.com/gyang274/skm).
+A brief introduction on how the problem is constructed, and the business problem targeted to solve.
 
-Welcome to view this [OWL app on shinyapp.io](https://gyang.shinyapps.io/skm_owl/).
+```{r, eval = FALSE}
+library(skm)
 
-## skm (selective k-means) 
+library(plyr)
+library(dplyr)
 
-skm (selective k-means) solves the following problem: assume a set of source $s$, a set of target $t$, and the costs $d(s, t)$ of shipping from $s$ to $t$, select $k$ of $s$ that minimizes the overall costs of shipping from $k$ such $s$ to all $t$, e.g., min(sum(min(d(s, t) for each t w.r.t selected k s))).
+#- question: a busniess want to start building it's warehouses - objective reach
+#- as many as u.s population as possible - minimize population weighted distance
+#- so where to build the first one, the second one, the third one, and etc.?
 
-## OWL Shiny Page: 
+## load skm built in datasets
+data("zip2012")
+data("source_zip_list")
 
-### Analytic View:
+## suppose build at most one warehouse in each state located at source_zip_list:
+## create a s <source> - t <destination> - dist <distance> analytical data.table
 
-+ The page is initialized with a U.S. map and a control panel at right hand side:
+## create dsrc s <source>
+dsrc <- zip2012 %>%
+  subset(zip %in% source_zip_list) %>%
+  rename(s = zip, s_lat = lat, s_lng = lng) %>%
+  select(s, s_lat, s_lng) %>%
+  `class<-`(c("data.table", "data.frame"))
 
-    ![OWL Page - Initialization](fig/owl_init.png){#owl_init .class width=640px height=407px}.
+## create ddst t <target> (destination)
+## want to reach all u.s. so all zip included
+ddst <- zip2012 %>% 
+  rename(t = zip, t_lat = lat, t_lng = lng) %>%
+  select(t, t_lat, t_lng, pop) %>%
+  `class<-`(c("data.table", "data.frame"))
 
-+ The page is supported by [U.S. zip 2012 data](http://federalgovernmentzipcodes.us/), with a full coverage of all 5 digits zip codes with their population and total incomes estimated from tax file. The analysis assumes user want to build warehouses from the 51 locations one in each states and ship the product to all states. These 51 locations are the 5 digits zip code in the center of 3 digits zip code that has highest population in each state, and are markered as green circle on the map. User can click on the green circle, information will be popup and suggestions will be shown in the message box on the bottom.
+## create analytical data ddzt: s - t - dist
 
-    ![OWL Page - Initialzation - Click](fig/owl_init_click.png){#owl_init_click .class width=640px height=407px}.
+# > yg::CJ.dt
+# function (X, Y) 
+# {
+#     stopifnot(is.data.table(X), is.data.table(Y))
+#     k = NULL
+#     X = X[, c(k = 1, .SD)]
+#     setkey(X, k)
+#     Y = Y[, c(k = 1, .SD)]
+#     setkey(Y, NULL)
+#     return(X[Y, allow.cartesian = TRUE][, `:=`(k, NULL)][])
+# }
+# <environment: namespace:yg>
 
-+ On the control panel, __Optimization Objective__, give options on:
+ddzt <- yg::CJ.dt(dsrc, ddst) %>%
+  mutate(dist = distRpl_wlatlng_cpp(s_lat, s_lng, t_lat, t_lng)) %>%
+  `class<-`(c("data.table", "data.frame"))
 
-    - Choose the objective: minimize distance, zone - [Fedex Rates on Zone](http://www.thesnowtrade.org/images/support/FedEx%20Zones.pdf), or estimated time in transit.
+## solve the problem with skm_mls
+## suppose we want to know the best solution for 1-10 number of warehouse:
+skm_mls(
+  x = ddzt, k = 1L:10L, s_colname = "s", t_colname = "t", 
+  d_colname = "dist", w_colname = "pop"
+)
 
-    - Choose the weighing strategy: weighted each zip area by population or total income?
+## suppose we already built 4 warehouses at NJ, IA, TX and CA, and want to
+## know where to build the 5th - 10th warehouse:
 
-    - Choose the location where a warehouse is already built, e.g., prefixed on, so that the solution will be as on top of these warehouses built.
+skm_mls(
+  x = ddzt, k = 5L:10L, s_colname = "s", t_colname = "t", 
+  d_colname = "dist", w_colname = "pop", 
+  s_must = c("07017",  "50317", "77804", "94596")
+)
 
-    - Choose the number of warehouse want to build. The analysis can be view as: finding \<number\> warehouse location with respect to minize \<weighting\> weighted average \<objective\>, assume \<pre-built\>.
-    
-        ![OWL Page - Option](fig/owl_option.png){#owl_option .class width=640px height=407px}.
+## a slightly different scenario is that we decided to build 4 warehouses 
+## at NJ, IA, TX and CA, and also want to know where to build the 5-10th.
+## when number of warehouse <= 4, select location within 4 already built,
+## and when number of warehhouse > 4 we build on top of these 4 locations
 
-    - Click __Find Warehouse Locations__ to run analysis and update the map, control panel and page.
+skm_mls(
+  x = ddzt, k = 1L:10L, s_colname = "s", t_colname = "t", 
+  d_colname = "dist", w_colname = "pop", 
+  s_must = c("07017",  "50317", "77804", "94596")
+)
 
-    ![OWL Page - Find](fig/owl_find.png){#owl_find .class width=640px height=407px}.  
-
-+ After click __Find Warehouse Locations__, control panel will be updated with a new section __Optimal Warehouse Locations__, which give options on:
-
-    - Choose to view results with optimality rank 1, 2, ..., up to the number of random start. This enable the user to view not only the best solution, but also the 2nd best solution, 3rd best solution, and so on. Because, in practial, we often make decsion not only based on mathematical optimality but also other factors.
-
-    - Choose to color the map with repsect to a measure like distance, zone, estimated time in transit, default is the same as the objective, but can be different.
-
-+ After click __Find Warehouse Locations__, map will be updated with markers on selected locations in solution, and color each 5 digits zip codes with respect to the measure selected in __Optimal Warehouse Locations__ panel. The map would color a sample of all 5 digits zip codes, basically, 10 of 5 digits zip codes are random selected from each 3 digits zip codes level and shown on map.
-
-+ After click __Find Warehouse Locations__, page will be updated with a new panel on left bottom corner shown the color schema, and a new panel on right bottom corner shown the solution in table.
-
-    ![OWL Page - View](fig/owl_view.png){#owl_view .class width=640px height=407px}.
-
-+ Analysis is running in real-time, often takes 8-10 seconds for 100 random starts.
-
-### Data Explorer 
-
-+ View zip2012 data in table.
-
-## TODO:
-
-+ Add customerized icons on map-view based on prefixed or not, see icons being commented out.
-
-## NOTE:
-
-+ Please contact [the author](mailto:gyang274@gmail.com) for any query on this App.
-
+```

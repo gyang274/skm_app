@@ -25,21 +25,25 @@ load_zip_dat <- function(dat_file = "mat/dzip2012.csv", waitime = 0) {
 
   if ( require(yg) ) {
 
-    xs <- yg::load_dbfile_sc(fn = dat_file, colname = a_colname, coltype = a_coltype,
-                             sc_colname = sc_colname, id_colname = NULL,
-                             waitime = waitime, sep = ",", skip = 1L)
+    xs <- yg::load_dbfile_sc(
+      fn = dat_file, colname = a_colname, coltype = a_coltype,
+      sc_colname = sc_colname, id_colname = NULL,
+      waitime = waitime, sep = ",", skip = 1L
+    )
 
   } else {
 
     # yg::load_dbfile_sc handle can readin w pre-specified order
-    sc_colname_sort = a_colname[sort(match(sc_colname, a_colname))]
+    sc_colname_sort <- a_colname[sort(match(sc_colname, a_colname))]
 
-    sc_coltype_sort = rep("NULL", length(a_coltype))
+    sc_coltype_sort <- rep("NULL", length(a_coltype))
 
-    sc_coltype_sort[match(sc_colname_sort, a_colname)] = a_colname[match(sc_colname_sort, a_colname)]
+    sc_coltype_sort[match(sc_colname_sort, a_colname)] <- a_colname[match(sc_colname_sort, a_colname)]
 
-    xs <- data.table::fread(input = dat_file, sep = ",", skip = 1L,
-                            col.names = sc_colname_sort, colClasses = sc_coltype_sort)
+    xs <- data.table::fread(
+      input = dat_file, sep = ",", skip = 1L,
+      col.names = sc_colname_sort, colClasses = sc_coltype_sort
+    )
 
     setcolorder(xs, sc_colname)
 
@@ -145,22 +149,32 @@ create_dmtx_from_ddzt <- function(ddat = ddzt) {
   ## objective with weighting - matrix
   for ( o in c("dist", "zone", "stnt") ) {
     
-    eval(parse(text = 'dmtx' %+% ' <- ' %+%
-                 'data.table::dcast(ddat[ , .(s, t, d = ' %+% o %+% ')], ' %+%
-                 's ~ t, value.var = "d") %>% ' %+% 
-                 'select(-s) %>% as.matrix()'))
+    eval(parse(text = paste0(
+      'dmtx <- data.table::dcast(',
+        'ddat[ , .(s, t, d = ', o, ')], s ~ t, value.var = "d"', 
+      ') %>% ', 
+        'select(-s) %>% as.matrix()'
+    )))
     
-    eval(parse(text = 'saveRDS(dmtx, file = "dat/dmtx' %+% '_' %+% o %+% '.RDS")'))
+    eval(parse(text = paste0(
+      'saveRDS(dmtx, file = "dat/dmtx', '_', o, '.RDS")'
+    )))
     
     for ( w in c("pop", "ink") ) {
       
-      eval(parse(text = 'dmtx' %+% ' <- ' %+%
-                   'data.table::dcast(ddat[ , .(s, t, d = ' %+% o %+% ' * ' %+% 'p_' %+% w %+% ')], ' %+%
-                   's ~ t, value.var = "d") %>% ' %+% 
-                   'select(-s) %>% as.matrix()'))
+      eval(parse(text = paste0(
+        'dmtx <- data.table::dcast(',
+          'ddat[ , .(s, t, d = ', o, ' * ', 'p_', w, ')], s ~ t, value.var = "d"', 
+        ') %>% ',
+          'select(-s) %>% as.matrix()'
+      )))
       
-      eval(parse(text = 'saveRDS(dmtx, file = "dat/dmtx' %+% '_' %+% o %+% '_' %+% w %+% '.RDS")'))
+      eval(parse(text = paste0(
+        'saveRDS(dmtx, file = "dat/dmtx', '_', o, '_', w, '.RDS")'
+      )))
+      
     }
+    
   }
   
   return(NULL)

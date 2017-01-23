@@ -2,7 +2,7 @@
 
 shinyUI(navbarPage(
   
-  title = "OWL: Optimal Warehouse Locator", id = "nav",
+  title = "OWL: Optimal Warehouse Locator", theme = "css/ygtheme.css", id = "nav",
 
   tabPanel(
     
@@ -13,9 +13,7 @@ shinyUI(navbarPage(
       class = "main",
       
       tags$head(
-        # include the custom CSS
-        includeCSS("styles.css"),
-        includeScript("gomap.js")
+        includeCSS("www/css/styles.css") # include the custom CSS
       ),
       
       leafletOutput(outputId = "map", width = "100%", height = "100%"),
@@ -142,9 +140,13 @@ shinyUI(navbarPage(
   
   tabPanel(
     
-    title = "README",
+    title = "HOWTO", includeMarkdown("HOWTO.md")
     
-    includeMarkdown("README.md")
+  ),
+  
+  tabPanel(
+    
+    title = "README", includeMarkdown("README.md")
     
   )
   
